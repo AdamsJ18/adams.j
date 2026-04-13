@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ToDoリスト</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>body { font-family: 'Noto Sans JP', sans-serif; }</style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
+
+    // ── 日付キー ──────────────────────────────────────────
+    function toKey(date) {
+      return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+    }
+
+    // ── 六曜 ──────────────────────────────────────────────
+    const ROKUYOU = ["先勝","友引","先負","仏滅","大安","赤口"];
+    const ROKUYOU_COLORS = {
+      先勝:"text-sky-500", 友引:"text-emerald-500",
+      先負:"text-slate-400", 仏滅:"text-slate-400",
+      大安:"text-red-500", 赤口:"text-rose-400",
+    };
+    function getRokuyou(date) {
+      const lunar = Lunar.fromDate(date);
+      const lm = Math.abs(lunar.getMonth());
+      const ld = lunar.getDay();
+      const name = ROKUYOU[((lm-1)+(ld-1))%6];
+      return { name, color: ROKUYOU_COLORS[name] };
+    }
+
+    // ── 祝日 ──────────────────────────────────────────────
+    function getNthWeekday(year, month, nth, weekday) {
+      const first = new Date(year, month-1, 1);
+      return 1 + (weekday - first.getDay() + 7) % 7 + (nth-1)*7;
+    }
+    function getHolidays(year) {
+      const h = {};
+      const k = (m,d) => `${year}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+      h[k(1,1)]="元日"; h[k(2,11)]="建国記念の日"; h[k(2,23)]="天皇誕生日";
+      h[k(4,29)]="昭和の日"; h[k(5,3)]="憲法記念日"; h[k(5,4)]="みどりの日";
+      h[k(5,5)]="こどもの日"; h[k(8,11)]="山の日";
+      h[k(11,3)]="文化の日"; h[k(11,23)]="勤労感謝の日";
+      h[k(1,getNthWeekday(year,1,2,1))]  = "成人の日";
+      h[k(7,getNthWeekday(year,7,3,1))]  = "海の日";
+      h[k(9,getNthWeekday(year,9,3,1))]  = "敬老の日";
+      h[k(10,getNthWeekday(year,10,2,1))]= "スポーツの日";
+      const y = year-1980;
+      h[k(3,Math.floor(20.8431+0.242194*y-Math.floor(y/4)))] = "春分の日";
+      h[k(9,Math.floor(23.2488+0.242194*y-Math.floor(y/4)))] = "秋分の日";
+      return h;
+    }
+
+    const WEEKDAYS = ["日","月","火","水","木","金","土"];
+
+    // ── カレンダー ─────────────────────────────────────────
+    function Calendar({ selectedDate, onSelectDate, todosByDate }) {
+      const today = new Date();
+      const [viewYear,  setViewYear]  = useState(today.getFullYear());
+      const [viewMonth, setViewMonth] = useState(today.getMonth()+1);
+      const holidays = useMemo(() => getHolidays(viewYear), [viewYear]);
+      const cells = useMemo(() => {
+        const firstDow = new Date(viewYear, viewMonth-1, 1).getDay();
+        const days     = new Date(viewYear, viewMonth, 0).getDate();
+        const arr = Array(firstDow).fill(null);
+        for (let d=1; d<=days; d++) arr.push(new Date(viewYear, viewMonth-1, d));
+        while (arr.length%7!==0) arr.push(null);
+        return arr;
+      }, [viewYear, viewMonth]);
+
+      const prevMonth = () => { if(viewMonth===1){setViewYear(y=>y-1);setViewMonth(12);}else setViewMonth(m=>m-1); };
+      const nextMonth = () => { if(viewMonth===12){setViewYear(y=>y+1);setViewMonth(1);}else setViewMonth(m=>m+1); };
+
+      const todayKey    = toKey(today);
+      const selectedKey = selectedDate ? toKey(selectedDate) : null;
+
+      return (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-6">
+          {/* ヘッダー */}
+          <div className="flex items-center justify-between mb-3">
+            <button onClick={prevMonth} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 transition">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <span className="text-sm font-semibold text-slate-700">{viewYear}年 {viewMonth}月</span>
+            <button onClick={nextMonth} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 transition">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+
+          {/* 曜日ヘッダー */}
+          <div className="grid grid-cols-7 mb-1">
+            {WEEKDAYS.map((w,i) => (
+              <div key={w} className={`text-center text-xs font-medium py-1 ${i===0?"text-red-400":i===6?"text-blue-400":"text-slate-400"}`}>{w}</div>
+            ))}
+          </div>
+
+          {/* 日付セル */}
+          <div className="grid grid-cols-7 gap-y-0.5">
+            {cells.map((date, i) => {
+              if (!date) return <div key={`e${i}`}/>;
+              const key        = toKey(date);
+              const dow        = date.getDay();
+              const isToday    = key===todayKey;
+              const isSelected = key===selectedKey;
+              const isHoliday  = !!holidays[key];
+              const rokuyo     = getRokuyou(date);
+              const hasTodos   = (todosByDate[key]?.length ?? 0) > 0;
+
+              const dayColor = isSelected ? "text-white"
+                : (isHoliday||dow===0) ? "text-red-500"
+                : dow===6 ? "text-blue-500" : "text-slate-700";
+
+              return (
+                <button key={key} onClick={() => onSelectDate(date)}
+                  className={`flex flex-col items-center py-1.5 rounded-xl transition-all ${
+                    isSelected ? "bg-indigo-500 shadow-sm"
+                    : isToday  ? "bg-indigo-50 ring-1 ring-indigo-200"
+                    : "hover:bg-slate-50"
+                  }`}
+                >
+                  <span className={`text-xs font-semibold leading-none ${dayColor}`}>{date.getDate()}</span>
+                  <span className={`text-[9px] leading-none mt-0.5 font-medium ${isSelected?"text-indigo-200":rokuyo.color}`}>{rokuyo.name}</span>
+                  <span className={`w-1 h-1 rounded-full mt-0.5 ${hasTodos ? (isSelected?"bg-indigo-200":"bg-indigo-400") : "bg-transparent"}`}/>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* 選択日の詳細 */}
+          {selectedDate && (() => {
+            const r = getRokuyou(selectedDate);
+            const key = toKey(selectedDate);
+            const holidayName = holidays[key];
+            const dow = selectedDate.getDay();
+            return (
+              <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-sm font-medium text-slate-700">
+                    {selectedDate.getFullYear()}年{selectedDate.getMonth()+1}月{selectedDate.getDate()}日
+                    <span className={`ml-1 text-xs ${dow===0?"text-red-500":dow===6?"text-blue-500":"text-slate-400"}`}>（{WEEKDAYS[dow]}）</span>
+                  </span>
+                  {holidayName && <span className="text-xs bg-red-50 text-red-500 px-1.5 py-0.5 rounded-md font-medium">{holidayName}</span>}
+                </div>
+                <span className={`text-base font-bold ${r.color}`}>{r.name}</span>
+              </div>
+            );
+          })()}
+        </div>
+      );
+    }
+
+    // ── カテゴリー設定 ─────────────────────────────────────
+    const CATEGORIES = ["仕事", "プライベート", "買い物"];
+    const CAT = {
+      仕事: {
+        bg:"bg-blue-50", border:"border-blue-200", accent:"border-l-blue-400",
+        badge:"bg-blue-100 text-blue-600", check:"bg-blue-400 border-blue-400",
+        checkHover:"hover:border-blue-300", editRing:"focus:ring-blue-300 border-blue-300",
+        saveBtn:"text-blue-500 hover:bg-blue-100", pencilHover:"hover:text-blue-400 hover:bg-blue-100",
+        btnBase:"border-blue-200 text-blue-500 hover:bg-blue-50",
+        btnActive:"bg-blue-400 border-blue-400 text-white shadow-sm",
+      },
+      プライベート: {
+        bg:"bg-pink-50", border:"border-pink-200", accent:"border-l-pink-400",
+        badge:"bg-pink-100 text-pink-600", check:"bg-pink-400 border-pink-400",
+        checkHover:"hover:border-pink-300", editRing:"focus:ring-pink-300 border-pink-300",
+        saveBtn:"text-pink-500 hover:bg-pink-100", pencilHover:"hover:text-pink-400 hover:bg-pink-100",
+        btnBase:"border-pink-200 text-pink-500 hover:bg-pink-50",
+        btnActive:"bg-pink-400 border-pink-400 text-white shadow-sm",
+      },
+      買い物: {
+        bg:"bg-yellow-50", border:"border-yellow-200", accent:"border-l-yellow-400",
+        badge:"bg-yellow-100 text-yellow-600", check:"bg-yellow-400 border-yellow-400",
+        checkHover:"hover:border-yellow-300", editRing:"focus:ring-yellow-300 border-yellow-300",
+        saveBtn:"text-yellow-600 hover:bg-yellow-100", pencilHover:"hover:text-yellow-500 hover:bg-yellow-100",
+        btnBase:"border-yellow-200 text-yellow-600 hover:bg-yellow-50",
+        btnActive:"bg-yellow-400 border-yellow-400 text-white shadow-sm",
+      },
+    };
+
+    // ── ToDoアプリ ─────────────────────────────────────────
+    function TodoApp() {
+      const [todosByDate, setTodosByDate] = useState(() => {
+        try {
+          const saved = localStorage.getItem("todosByDate");
+          return saved ? JSON.parse(saved) : {};
+        } catch { return {}; }
+      });
+      const [input,        setInput]        = useState("");
+      const [category,     setCategory]     = useState("仕事");
+      const [selectedDate, setSelectedDate] = useState(null);
+      const [editingId,    setEditingId]    = useState(null);
+      const [editingText,  setEditingText]  = useState("");
+
+      useEffect(() => {
+        localStorage.setItem("todosByDate", JSON.stringify(todosByDate));
+      }, [todosByDate]);
+
+      const dateKey      = selectedDate ? toKey(selectedDate) : null;
+      const currentTodos = dateKey ? (todosByDate[dateKey] ?? []) : [];
+      const remaining    = currentTodos.filter(t => !t.completed).length;
+
+      const addTodo = () => {
+        if (!dateKey) return;
+        const trimmed = input.trim();
+        if (!trimmed) return;
+        setTodosByDate(prev => ({
+          ...prev,
+          [dateKey]: [...(prev[dateKey]??[]), { id: Date.now(), text: trimmed, completed: false, category }],
+        }));
+        setInput("");
+      };
+      const toggleTodo = (id) => {
+        if (!dateKey) return;
+        setTodosByDate(prev => ({
+          ...prev,
+          [dateKey]: (prev[dateKey]??[]).map(t => t.id===id ? {...t, completed: !t.completed} : t),
+        }));
+      };
+      const deleteTodo = (id) => {
+        if (!dateKey) return;
+        setTodosByDate(prev => ({
+          ...prev,
+          [dateKey]: (prev[dateKey]??[]).filter(t => t.id!==id),
+        }));
+      };
+      const startEdit = (todo) => { setEditingId(todo.id); setEditingText(todo.text); };
+      const cancelEdit = () => { setEditingId(null); setEditingText(""); };
+      const saveEdit = (id) => {
+        const trimmed = editingText.trim();
+        if (!trimmed || !dateKey) { cancelEdit(); return; }
+        setTodosByDate(prev => ({
+          ...prev,
+          [dateKey]: (prev[dateKey]??[]).map(t => t.id===id ? {...t, text: trimmed} : t),
+        }));
+        cancelEdit();
+      };
+
+      const clearCompleted = () => {
+        if (!dateKey) return;
+        setTodosByDate(prev => ({
+          ...prev,
+          [dateKey]: (prev[dateKey]??[]).filter(t => !t.completed),
+        }));
+      };
+
+      return (
+        <div className="min-h-screen flex items-start justify-center pt-10 px-4 pb-10">
+          <div className="w-full max-w-md">
+            <div className="flex flex-col items-center mb-8">
+              <p className="text-xs font-medium tracking-widest text-slate-400 uppercase mb-3">
+                Did you forget anything?
+              </p>
+              <img
+                src="/rooster.png"
+                alt="rooster"
+                className="w-24 h-24 object-contain mb-4"
+              />
+              <h1 className="text-3xl font-bold text-slate-800 tracking-tight">ToDoリスト</h1>
+              {selectedDate && currentTodos.length > 0 && (
+                <p className="mt-1 text-sm text-slate-400">残り <span className="font-semibold text-slate-600">{remaining}</span> 件</p>
+              )}
+            </div>
+
+            <Calendar selectedDate={selectedDate} onSelectDate={setSelectedDate} todosByDate={todosByDate} />
+
+            {!selectedDate && (
+              <div className="text-center py-10 text-slate-300 select-none">
+                <div className="text-4xl mb-3">📅</div>
+                <p className="text-sm">上のカレンダーから日付を選んでください</p>
+              </div>
+            )}
+
+            {selectedDate && (
+              <>
+                {/* カテゴリー選択 */}
+                <div className="flex gap-2 mb-3">
+                  {CATEGORIES.map(cat => (
+                    <button key={cat} onClick={() => setCategory(cat)}
+                      className={`flex-1 py-2 rounded-xl text-xs font-semibold border transition-all ${
+                        category === cat ? CAT[cat].btnActive : CAT[cat].btnBase
+                      }`}>
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+
+                {/* 入力欄 */}
+                <div className="flex gap-2 mb-5">
+                  <input
+                    type="text" value={input}
+                    onChange={e => setInput(e.target.value)}
+                    placeholder="新しいタスクを入力..."
+                    className="flex-1 px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent shadow-sm transition"
+                  />
+                  <button onClick={addTodo}
+                    className="px-5 py-3 rounded-xl bg-indigo-500 text-white font-medium hover:bg-indigo-600 active:scale-95 transition-all shadow-sm">
+                    追加
+                  </button>
+                </div>
+
+                <div className="space-y-2">
+                  {currentTodos.length === 0 && (
+                    <div className="text-center py-10 text-slate-300 select-none">
+                      <div className="text-4xl mb-3">📋</div>
+                      <p className="text-sm">この日のタスクはありません</p>
+                    </div>
+                  )}
+                  {currentTodos.map(todo => {
+                    const isEditing = editingId === todo.id;
+                    const c = CAT[todo.category ?? "仕事"];
+                    return (
+                      <div key={todo.id}
+                        className={`flex items-center gap-2 pl-3 pr-3 py-3 rounded-xl border-l-4 shadow-sm transition-all
+                          ${c.bg} ${c.border} ${c.accent}
+                          ${todo.completed&&!isEditing?"opacity-50":""}`}
+                      >
+                        {/* チェック */}
+                        {!isEditing && (
+                          <button onClick={() => toggleTodo(todo.id)}
+                            className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                              todo.completed ? c.check : `border-slate-300 ${c.checkHover}`
+                            }`}
+                          >
+                            {todo.completed && (
+                              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                              </svg>
+                            )}
+                          </button>
+                        )}
+
+                        {/* テキスト / 編集入力 */}
+                        {isEditing ? (
+                          <input autoFocus type="text" value={editingText}
+                            onChange={e => setEditingText(e.target.value)}
+                            onKeyDown={e => { if(e.key==="Enter") saveEdit(todo.id); if(e.key==="Escape") cancelEdit(); }}
+                            className={`flex-1 text-sm px-2 py-1 rounded-lg border bg-white focus:outline-none focus:ring-2 text-slate-700 ${c.editRing}`}
+                          />
+                        ) : (
+                          <div className="flex-1 min-w-0">
+                            <span className={`text-sm text-slate-700 ${todo.completed?"line-through text-slate-400":""}`}>{todo.text}</span>
+                            <span className={`ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-md ${c.badge}`}>{todo.category ?? "仕事"}</span>
+                          </div>
+                        )}
+
+                        {/* 編集中: 保存 & キャンセル */}
+                        {isEditing && (
+                          <>
+                            <button onClick={() => saveEdit(todo.id)} title="保存"
+                              className={`flex-shrink-0 p-1.5 rounded-lg transition-colors ${c.saveBtn}`}>
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                              </svg>
+                            </button>
+                            <button onClick={cancelEdit} title="キャンセル"
+                              className="flex-shrink-0 p-1.5 rounded-lg text-slate-300 hover:text-slate-500 hover:bg-white/60 transition-colors">
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                              </svg>
+                            </button>
+                          </>
+                        )}
+
+                        {/* 通常時: 編集 & 削除 */}
+                        {!isEditing && (
+                          <>
+                            <button onClick={() => startEdit(todo)} title="編集"
+                              className={`flex-shrink-0 p-1.5 rounded-lg text-slate-300 transition-colors ${c.pencilHover}`}>
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-1.414.586H9v-2a2 2 0 01.586-1.414z"/>
+                              </svg>
+                            </button>
+                            <button onClick={() => deleteTodo(todo.id)} title="削除"
+                              className="flex-shrink-0 p-1.5 rounded-lg text-slate-300 hover:text-red-400 hover:bg-red-50 transition-colors">
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                              </svg>
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {currentTodos.some(t => t.completed) && (
+                  <div className="mt-4 flex justify-end">
+                    <button onClick={clearCompleted} className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+                      完了済みを削除
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<TodoApp />);
+  </script>
+</body>
+</html>

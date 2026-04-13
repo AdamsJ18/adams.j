@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3456 2160" width="3456" height="2160">
+  <rect width="3456" height="2160" fill="white"/>
+  <line x1="1728" y1="260" x2="1728" y2="1900" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="864" y="540" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="100" font-weight="200" fill="#1a1a1a" letter-spacing="18">APRIL 2026</text>
+  <line x1="216" y1="595" x2="1511" y2="595" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="309.0" y="670" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="38" font-weight="300" fill="#ef4444" letter-spacing="3">SUN</text>
+  <text x="494.0" y="670" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="38" font-weight="300" fill="#6b7280" letter-spacing="3">MON</text>
+  <text x="679.0" y="670" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="38" font-weight="300" fill="#6b7280" letter-spacing="3">TUE</text>
+  <text x="864.0" y="670" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="38" font-weight="300" fill="#6b7280" letter-spacing="3">WED</text>
+  <text x="1049.0" y="670" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="38" font-weight="300" fill="#6b7280" letter-spacing="3">THU</text>
+  <text x="1234.0" y="670" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="38" font-weight="300" fill="#6b7280" letter-spacing="3">FRI</text>
+  <text x="1419.0" y="670" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="38" font-weight="300" fill="#3b82f6" letter-spacing="3">SAT</text>
+  <text x="864.0" y="818.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">1</text>
+  <text x="1049.0" y="818.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">2</text>
+  <text x="1234.0" y="818.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">3</text>
+  <text x="1419.0" y="818.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#3b82f6">4</text>
+  <text x="309.0" y="973.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#ef4444">5</text>
+  <text x="494.0" y="973.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">6</text>
+  <text x="679.0" y="973.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">7</text>
+  <text x="864.0" y="973.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">8</text>
+  <text x="1049.0" y="973.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">9</text>
+  <text x="1234.0" y="973.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">10</text>
+  <text x="1419.0" y="973.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#3b82f6">11</text>
+  <circle cx="309.0" cy="1112.0" r="52" fill="#4f46e5"/>
+  <text x="309.0" y="1128.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="400" fill="white">12</text>
+  <text x="494.0" y="1128.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">13</text>
+  <text x="679.0" y="1128.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">14</text>
+  <text x="864.0" y="1128.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">15</text>
+  <text x="1049.0" y="1128.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">16</text>
+  <text x="1234.0" y="1128.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">17</text>
+  <text x="1419.0" y="1128.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#3b82f6">18</text>
+  <text x="309.0" y="1283.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#ef4444">19</text>
+  <text x="494.0" y="1283.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">20</text>
+  <text x="679.0" y="1283.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">21</text>
+  <text x="864.0" y="1283.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">22</text>
+  <text x="1049.0" y="1283.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">23</text>
+  <text x="1234.0" y="1283.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">24</text>
+  <text x="1419.0" y="1283.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#3b82f6">25</text>
+  <text x="309.0" y="1438.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#ef4444">26</text>
+  <text x="494.0" y="1438.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">27</text>
+  <text x="679.0" y="1438.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">28</text>
+  <text x="864.0" y="1438.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#ef4444">29</text>
+  <text x="864.0" y="1488.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="22" font-weight="300" fill="#ef4444">昭和の日</text>
+  <text x="1049.0" y="1438.0" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="64" font-weight="300" fill="#1a1a1a">30</text>
+  <text x="2592" y="540" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="76" font-weight="200" fill="#1a1a1a" letter-spacing="2">Did you forget anything?</text>
+
+  <g stroke="#22a85a" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- BODY: large egg-shaped ellipse -->
+    <ellipse cx="2592" cy="1230" rx="210" ry="160"/>
+
+    <!-- HEAD: circle -->
+    <circle cx="2792" cy="1020" r="95"/>
+
+    <!-- NECK connecting body to head -->
+    <path d="M 2722,1095 C 2757,1070 2777,1060 2782,1060
+             M 2692,1135 C 2732,1100 2752,1085 2757,1080"/>
+
+    <!-- BEAK -->
+    <path d="M 2882,1010 L 2942,1022 L 2882,1034 Z" fill="#22a85a" stroke="none"/>
+
+    <!-- COMB (3 bumps on top of head) -->
+    <path d="M 2747,940
+             C 2742,900 2757,870 2777,890
+             C 2782,850 2802,840 2812,870
+             C 2817,835 2840,835 2840,865
+             C 2854,845 2870,860 2860,885
+             C 2870,890 2870,915 2852,925
+             L 2747,940 Z"
+          fill="#22a85a" stroke="#22a85a" stroke-width="10"/>
+
+    <!-- WATTLE (below beak) -->
+    <path d="M 2857,1050 C 2872,1075 2867,1105 2847,1110
+             C 2827,1115 2817,1095 2832,1065 C 2840,1050 2852,1045 2857,1050 Z"
+          fill="#22a85a" stroke="none"/>
+
+    <!-- TAIL FEATHERS (left side) -->
+    <path d="M 2387,1180 C 2312,1120 2232,1070 2212,1090
+             C 2197,1110 2232,1160 2292,1185"/>
+    <path d="M 2387,1230 C 2302,1240 2212,1210 2197,1245
+             C 2187,1270 2227,1295 2297,1285"/>
+    <path d="M 2387,1280 C 2317,1320 2247,1340 2252,1375
+             C 2257,1400 2292,1400 2332,1375"/>
+
+    <!-- WING detail line on body -->
+    <path d="M 2512,1130 C 2612,1080 2692,1090 2722,1140"/>
+
+    <!-- LEGS -->
+    <line x1="2542" y1="1385" x2="2522" y2="1490"/>
+    <line x1="2522" y1="1490" x2="2482" y2="1515"/>
+    <line x1="2522" y1="1490" x2="2537"  y2="1515"/>
+    <line x1="2522" y1="1490" x2="2557"  y2="1515"/>
+
+    <line x1="2642" y1="1385" x2="2662" y2="1490"/>
+    <line x1="2662" y1="1490" x2="2622"  y2="1515"/>
+    <line x1="2662" y1="1490" x2="2667"  y2="1515"/>
+    <line x1="2662" y1="1490" x2="2702" y2="1515"/>
+
+  </g>
+
+</svg>

@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest todo-app --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --yes)",
+      "Bash(npm --version)",
+      "Bash(export PATH=\"/usr/local/bin:/opt/homebrew/bin:$PATH\")",
+      "Read(//opt/homebrew/bin/**)",
+      "Read(//usr/local/bin/**)",
+      "Read(//Users/junya/.nvm/versions/**)",
+      "Bash(echo $PATH)",
+      "Bash(ls ~/.*rc)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(chmod +x /Users/junya/Documents/adams.j/todo-app/serve.sh)",
+      "Bash(export PATH=\"$HOME/.nvm/versions/node/$\\(ls ~/.nvm/versions/node/)",
+      "Bash(git push:*)",
+      "Bash(python3 -c \"from PIL import Image; print\\('PIL OK'\\)\")",
+      "Bash(xxd /Users/junya/Documents/adams.j/todo-app/public/favicon.ico)",
+      "Bash(python3)",
+      "Bash(open /Users/junya/Documents/adams.j/wallpaper-april2026.svg)",
+      "Bash(open /Users/junya/Documents/adams.j/wallpaper-april2026.png)"
+    ]
+  }
+}
